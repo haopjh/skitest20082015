@@ -54,7 +54,7 @@
 
 		//Once the data is ready, run the processing method
 		runSearch();
-		console.log(longestRoute, steepestJump)
+		console.log(longestRoute, steepestJump);
 	}
 
 
@@ -79,7 +79,6 @@
 			}
 		}
 	}
-	// console.log(longestRoute, steepestJump);
 
 	function searchNextJump(route, tempX, tempY) {
 
