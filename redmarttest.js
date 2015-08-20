@@ -4,6 +4,7 @@
 	var longestRoute = 0;
 	var steepestJump = 0;
 	var overallRoute = [];
+	var routeList = [];
 
 	//Initiate the gathering of data
 	getData();
@@ -29,9 +30,14 @@
 	}
 
 	function formatNumberList(numberList) {
-		numberList = numberList.split(" ");
+		numberList = numberList.replace( /\n/g, " " ).split(" ");
+		dimension = parseInt(numberList[0]);
+		//Removes first 2 dimensions
 		numberList.shift();
 		numberList.shift();
+
+		//Removes the last empty value
+		numberList.pop();
 
 		// numberList = [
 		// 4,8,7,3,
@@ -39,22 +45,22 @@
 		// 6,3,2,5,
 		// 4,4,1,6
 		// ];
+		// dimension = numberList[0];
 
-		dimension = numberList[0];
 
-		//Format the data into 2 dimensional data
+		// Format the data into 2 dimensional data
 		for(var i=0; i<numberList.length; i++) {
 			var column = Math.floor(i/dimension);
 			if(compiledList[column]) {
-				compiledList[column].push(numberList[i]);
+				compiledList[column].push(parseInt(numberList[i]));
 			} else {
-				compiledList.push([numberList[i]]);
+				compiledList.push([parseInt(numberList[i])]);
 			}
 		}
 
 		//Once the data is ready, run the processing method
 		runSearch();
-		console.log(longestRoute, steepestJump);
+		console.log(longestRoute, steepestJump, routeList);
 	}
 
 
@@ -76,6 +82,7 @@
 			if(longestRoute <= routeLength && steepestJump < routeJump) {
 				longestRoute = routeLength;
 				steepestJump = routeJump;
+				routeList = route;
 			}
 		}
 	}
@@ -83,7 +90,7 @@
 	function searchNextJump(route, tempX, tempY) {
 
 		var currentNum = getNextJump(tempX, tempY);
-		var existingNum = currentNum;
+
 		if(currentNum){
 			route.push(currentNum);
 		}
@@ -92,18 +99,21 @@
 
 		if(tempX > 0  && 
 			getNextJump(tempX-1, tempY) < route[route.length-1]) {
+			//North
 			var newRoute = route.slice(0);
 			searchNextJump(newRoute, tempX-1, tempY);
 			letsgo = true;
 		}
-		if(tempY < dimension - 1 && 
+		if(tempY < dimension-1  && 
 			getNextJump(tempX, tempY+1) < route[route.length-1]) {
+			//East
 			var newRoute = route.slice(0);
 			searchNextJump(newRoute, tempX, tempY+1);
 			letsgo = true;
 		}
 		if(tempX < dimension-1 && 
 			getNextJump(tempX+1, tempY) < route[route.length-1]) {
+			//South
 			var newRoute = route.slice(0);
 			searchNextJump(newRoute, tempX+1, tempY);
 			letsgo = true;
@@ -111,6 +121,7 @@
 
 		if(tempY > 0 && 
 			getNextJump(tempX, tempY-1) < route[route.length-1]) {
+			//West
 			var newRoute = route.slice(0);
 			searchNextJump(newRoute, tempX, tempY-1);
 			letsgo = true;
