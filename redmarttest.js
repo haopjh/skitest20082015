@@ -47,7 +47,6 @@
 		// ];
 		// dimension = numberList[0];
 
-
 		// Format the data into 2 dimensional data
 		for(var i=0; i<numberList.length; i++) {
 			var column = Math.floor(i/dimension);
@@ -57,6 +56,7 @@
 				compiledList.push([parseInt(numberList[i])]);
 			}
 		}
+
 
 		//Once the data is ready, run the processing method
 		runSearch();
@@ -73,18 +73,27 @@
 			}
 		}
 
+
 		//Get the longest route with steepest jump
 		for (var i=0; i<overallRoute.length; i++) {
+
 			var route = overallRoute[i];
 			var routeLength = route.length;
 			var routeJump = route[0] - route[routeLength-1];
 
-			if(longestRoute <= routeLength && steepestJump < routeJump) {
+			if(longestRoute < routeLength) {
+				//Replace both variables
 				longestRoute = routeLength;
 				steepestJump = routeJump;
 				routeList = route;
+			} else if (longestRoute === routeLength) {
+				//Check if jump is higher
+				if(steepestJump < routeJump) {
+					steepestJump = routeJump;
+				}
 			}
 		}
+
 	}
 
 	function searchNextJump(route, tempX, tempY) {
